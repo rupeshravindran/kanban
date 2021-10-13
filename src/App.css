@@ -1,0 +1,10 @@
+.App {
+  text-align: left;
+}
+
+.StageContainer {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+
+}
