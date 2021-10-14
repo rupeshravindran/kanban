@@ -17,12 +17,14 @@ class Control extends React.Component {
       <div className="Control">
         <div>
           <input
-            id="userId"
+            id="task"
             type="text"
+            data-testid="new-task-name-input"
             value={this.state.task}
             onChange={this.handleTask}
           />
           <button
+            data-testid="create-button"
             onClick={() => {
               this.props.addTask({
                 name: this.state.task,
@@ -38,7 +40,9 @@ class Control extends React.Component {
             marginTop: "10px",
           }}
         >
-          <label>{this.props?.selectedTask?.name}</label>
+          <input data-testid="selected-task-field"
+            value={this.props?.selectedTask?.name  || ''}>
+          </input>
           <button
             onClick={() => {
               this.props.moveForward();
