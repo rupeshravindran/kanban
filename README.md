@@ -1,342 +1,70 @@
-import React from 'react';
-import App from './App';
-import { render, fireEvent, cleanup } from '@testing-library/react';
-
-import 'jest-dom/extend-expect';
-
-let renderApp = () => render(<App />);
+# Getting Started with Create React App
 
-const NUM_STAGES = 4;
-
-const testIds = {
-  createTaskInput: "new-task-name-input",
-  createTaskButton: "create-task-btn",
-  selectedTaskField: "selected-task-field",
-  moveBackBtn: "move-back-btn",
-  moveForwardBtn: "move-forward-btn",
-  deleteBtn: "delete-btn",
-  stages: ["stage-0", "stage-1", "stage-2", "stage-3"],
-};
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-const stageNames = ["Backlog", "To Do", "Ongoing", "Done"];
-
-const taskNameToId = name => {
-  return `task-${name.split(' ').join('-')}`;
-}
-
-const predefinedTasks = {
-  0: [
-    "task 0",
-    "task 1",
-    "task 2",
-    "task 3",
-  ],
-  1: [
-    "task 4",
-    "task 5",
-    "task 6",
-  ],
-  2: [
-    "task 7",
-    "task 8",
-  ],
-  3: [
-    "task 9",
-  ],
-};
+## Available Scripts
 
-beforeEach(() => {
-  renderApp = () => render(<App />);
-});
+In the project directory, you can run:
 
-afterEach(() => {
-  cleanup();
-});
+### `yarn start`
 
-test('Clicking on any card should display the name in textbox', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-  const task = getByTestId(taskNameToId('task 1'));
-  fireEvent.click(task);
+### `yarn test`
 
-  expect(selectedTaskField).toHaveValue('task 1');
-});
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+### `yarn build`
 
-test('Once the card selected based on the current stage able move forward and backward', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const moveForwardBtn = getByTestId(testIds.moveForwardBtn);
-  const moveBackBtn = getByTestId(testIds.moveBackBtn);
-  const firstStage = getByTestId(testIds.stages[1]);
-  const secondStage = getByTestId(testIds.stages[2]);
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-  const task = getByTestId(taskNameToId('task 4'));
-  fireEvent.click(task);
-  expect(selectedTaskField).toHaveValue('task 4');
+### `yarn eject`
 
-  expect(moveBackBtn).toBeEnabled();
-  expect(moveForwardBtn).toBeEnabled();
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-  fireEvent.click(moveForwardBtn);
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-  expect(firstStage).not.toContainElement(queryByTestId(taskNameToId('task 4')));
-  expect(secondStage).toContainElement(queryByTestId(taskNameToId('task 4')));
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-  fireEvent.click(moveBackBtn);
+## Learn More
 
-  expect(firstStage).toContainElement(queryByTestId(taskNameToId('task 4')));
-  expect(secondStage).not.toContainElement(queryByTestId(taskNameToId('task 4')));
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-});
+To learn React, check out the [React documentation](https://reactjs.org/).
 
+### Code Splitting
 
-test('If the card/task selected from the 1st stage should disable the "Move backward" button.', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const moveForwardBtn = getByTestId(testIds.moveForwardBtn);
-  const moveBackBtn = getByTestId(testIds.moveBackBtn);
+### Analyzing the Bundle Size
 
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-  const task = getByTestId(taskNameToId('task 0'));
-  fireEvent.click(task);
-  expect(selectedTaskField).toHaveValue('task 0');
+### Making a Progressive Web App
 
-  expect(moveBackBtn).toBeDisabled();
-  expect(moveForwardBtn).toBeEnabled();
-});
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
+### Advanced Configuration
 
-test('If the card/task selected from the last stage should disable the "Move forward" button.', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const moveForwardBtn = getByTestId(testIds.moveForwardBtn);
-  const moveBackBtn = getByTestId(testIds.moveBackBtn);
+### Deployment
 
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-  const task = getByTestId(taskNameToId('task 9'));
-  fireEvent.click(task);
-  expect(selectedTaskField).toHaveValue('task 9');
+### `yarn build` fails to minify
 
-  expect(moveForwardBtn).toBeDisabled();
-  expect(moveBackBtn).toBeEnabled();
-});
-
-
-test('After selecting task from 2nd stage and clicking on Move forward button move the card to 3rd stage.', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
-
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const moveForwardBtn = getByTestId(testIds.moveForwardBtn);
-  const firstStage = getByTestId(testIds.stages[1]);
-  const lastStage = getByTestId(testIds.stages[2]);
-
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
-
-  const task = getByTestId(taskNameToId('task 5'));
-  fireEvent.click(task);
-
-  expect(selectedTaskField).toHaveValue('task 5');
-  expect(moveForwardBtn).toBeEnabled();
-
-  fireEvent.click(moveForwardBtn);
-
-  expect(firstStage).not.toContainElement(queryByTestId(taskNameToId('task 5')));
-  expect(lastStage).toContainElement(queryByTestId(taskNameToId('task 5')));
-});
-
-
-test('After selecting task from 2nd stage and clicking on Move backward button move the card to 1st stage.', () => {
-
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
-
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const moveBackBtn = getByTestId(testIds.moveBackBtn);
-  const firstStage = getByTestId(testIds.stages[1]);
-  const lastStage = getByTestId(testIds.stages[0]);
-
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
-
-  const task = getByTestId(taskNameToId('task 5'));
-  fireEvent.click(task);
-  expect(selectedTaskField).toHaveValue('task 5');
-  expect(moveBackBtn).toBeEnabled();
-
-  fireEvent.click(moveBackBtn);
-
-  expect(moveBackBtn).toBeDisabled();
-  expect(firstStage).not.toContainElement(queryByTestId(taskNameToId('task 5')));
-  expect(lastStage).toContainElement(queryByTestId(taskNameToId('task 5')));
-});
-
-
-test('Once the card selected and clicking on  Delete button should remove the card from board.', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
-
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const deleteBtn = getByTestId(testIds.deleteBtn);
-  const firstStage = getByTestId(testIds.stages[0]);
-
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
-
-  const task = getByTestId(taskNameToId('task 0'));
-  fireEvent.click(task);
-  expect(selectedTaskField).toHaveValue('task 0');
-  expect(deleteBtn).toBeEnabled();
-
-  fireEvent.click(deleteBtn);
-
-  expect(firstStage).not.toContainElement(queryByTestId(taskNameToId('task 0')));
-  expect(selectedTaskField).toHaveValue('');
-  expect(selectedTaskField.placeholder).toEqual('Selected task name');
-});
-
-
-test('Clicking on "Add card" button should add one card in first stage and able move forward and backward. ', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
-
-  const createTaskInput = getByTestId(testIds.createTaskInput);
-  const createTaskButton = getByTestId(testIds.createTaskButton);
-
-  const firstStage = getByTestId(testIds.stages[0]);
-  const secondStage = getByTestId(testIds.stages[1]);
-
-  const taskName = 'new task';
-  const taskId = taskNameToId(taskName);
-
-  fireEvent.change(createTaskInput, {
-    target: { value: taskName }
-  });
-
-  expect(firstStage).not.toContainElement(queryByTestId(taskId));
-  expect(secondStage).not.toContainElement(queryByTestId(taskId));
-
-  fireEvent.click(createTaskButton);
-
-  const task = getByTestId(taskId);
-  fireEvent.click(task);
-
-  expect(firstStage).toContainElement(queryByTestId(taskId));
-  expect(secondStage).not.toContainElement(queryByTestId(taskId));
-
-
-  const moveForwardBtn = getByTestId(testIds.moveForwardBtn);
-  const moveBackBtn = getByTestId(testIds.moveBackBtn);
-
-  fireEvent.click(moveForwardBtn);
-  expect(firstStage).not.toContainElement(queryByTestId(taskId));
-  expect(secondStage).toContainElement(queryByTestId(taskId));
-
-  fireEvent.click(moveBackBtn);
-  expect(firstStage).toContainElement(queryByTestId(taskId));
-  expect(secondStage).not.toContainElement(queryByTestId(taskId));
-});
-
-
-
-test('Clicking on "Add card" button without any input should not affect anything', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
-  const createTaskButton = getByTestId(testIds.createTaskButton);
-  expect(createTaskButton).toBeDisabled();
-});
-
-
-
-test('Move forward an item till the last state and should disable the move forward button', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
-
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const moveForwardBtn = getByTestId(testIds.moveForwardBtn);
-  const moveBackBtn = getByTestId(testIds.moveBackBtn);
-  const firstStage = getByTestId(testIds.stages[0]);
-  const lastStage = getByTestId(testIds.stages[3]);
-
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
-
-  const task = getByTestId(taskNameToId('task 0'));
-  fireEvent.click(task);
-  expect(selectedTaskField).toHaveValue('task 0');
-
-  expect(moveBackBtn).toBeDisabled();
-  expect(moveForwardBtn).toBeEnabled();
-
-  fireEvent.click(moveForwardBtn);
-  fireEvent.click(moveForwardBtn);
-  fireEvent.click(moveForwardBtn);
-
-  expect(moveForwardBtn).toBeDisabled();
-  expect(firstStage).not.toContainElement(queryByTestId(taskNameToId('task 0')));
-  expect(lastStage).toContainElement(queryByTestId(taskNameToId('task 0')));
-});
-
-
-
-test('Move backward an item till the first state and should disable the move backward button', () => {
-  const {
-    getByText, getByTestId, queryByText, queryByTestId, container, asFragment
-  } = renderApp();
-
-  const selectedTaskField = getByTestId(testIds.selectedTaskField);
-  const moveForwardBtn = getByTestId(testIds.moveForwardBtn);
-  const moveBackBtn = getByTestId(testIds.moveBackBtn);
-  const firstStage = getByTestId(testIds.stages[3]);
-  const lastStage = getByTestId(testIds.stages[0]);
-
-  expect(selectedTaskField).toBeVisible();
-  expect(selectedTaskField).toHaveValue('');
-
-  const task = getByTestId(taskNameToId('task 9'));
-  fireEvent.click(task);
-  expect(selectedTaskField).toHaveValue('task 9');
-
-  expect(moveBackBtn).toBeEnabled();
-  expect(moveForwardBtn).toBeDisabled();
-
-  fireEvent.click(moveBackBtn);
-  fireEvent.click(moveBackBtn);
-  fireEvent.click(moveBackBtn);
-
-  expect(moveBackBtn).toBeDisabled();
-  expect(firstStage).not.toContainElement(queryByTestId(taskNameToId('task 9')));
-  expect(lastStage).toContainElement(queryByTestId(taskNameToId('task 9')));
-});
-
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
